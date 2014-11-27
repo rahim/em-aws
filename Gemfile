@@ -8,7 +8,7 @@ gem 'rake'
 group :development do
   gem "guard-bundler"
   gem "guard-rspec"
-  gem "rspec"
+  gem "rspec" 
 
   gem "guard-yard"
   gem "growl"
