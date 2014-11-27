@@ -5,53 +5,53 @@ shared_examples "a Service" do
     end
   
     it "knows its endpoint" do
-      subject.url.should =~ /^https:.*amazonaws\.com\//
+      expect(subject.url).to be =~ /^https:.*amazonaws\.com\//
     end
   
     it "defaults to the global region" do
-      subject.region.should == 'us-east-1'
+      expect(subject.region).to be == 'us-east-1'
     end
   
     it "can override the region" do
-      new_subject(region: 'ap-southeast-1').region.should == 'ap-southeast-1'
+      expect(new_subject(region: 'ap-southeast-1').region).to be == 'ap-southeast-1'
     end
   
     it "defaults to the global SSL setting" do
-      subject.ssl.should == true
+      expect(subject.ssl).to be_truthy
     end
   
     it "can override the SSL setting" do
-      new_subject(ssl: false).ssl.should be_false
+      expect(new_subject(ssl: false).ssl).to be false
     end
   
     it "computes the endpoint from the provided region and SSL settings" do
       this = new_subject(ssl: false, region: 'eu-west-1')
-      this.url.should =~ /^http:.*eu-west-1/
+      expect(this.url).to be =~ /^http:.*eu-west-1/
     end
   
     it "can override the endpoint" do
       this = new_subject(url: 'http://blahblah.org')
-      this.url.should == 'http://blahblah.org'
+      expect(this.url).to be == 'http://blahblah.org'
     end  
     
     it "defaults to the global AWS credentials" do
-      subject.aws_access_key_id.should == EventMachine::AWS.aws_access_key_id
-      subject.aws_secret_access_key.should == EventMachine::AWS.aws_secret_access_key
+      expect(subject.aws_access_key_id).to be == EventMachine::AWS.aws_access_key_id
+      expect(subject.aws_secret_access_key).to be == EventMachine::AWS.aws_secret_access_key
     end
     
     it "can override the credentials" do
       this = new_subject(aws_access_key_id: "FAKE_OVERRIDE_ACCESS", aws_secret_access_key: "FAKE_OVERRIDE_SECRET")
-      this.aws_access_key_id.should == "FAKE_OVERRIDE_ACCESS"
-      this.aws_secret_access_key.should == "FAKE_OVERRIDE_SECRET"
+      expect(this.aws_access_key_id).to be == "FAKE_OVERRIDE_ACCESS"
+      expect(this.aws_secret_access_key).to be == "FAKE_OVERRIDE_SECRET"
     end
     
     it "defaults to POST queries" do
-      subject.method.should == :post
+      expect(subject.method).to be == :post
     end
     
     it "can override the HTTP method" do
       this = new_subject(method: :get)
-      this.method.should == :get
+      expect(this.method).to be == :get
     end
   end
   
@@ -74,21 +74,21 @@ shared_examples "a Service" do
       
       it "retries on HTTP request failure" do
         EM.run {subject.send(:send_request, @request)}
-        @response.body.should == 'Success'
-        @request.attempts.should == 4
+        expect(@response.body).to be == 'Success'
+        expect(@request.attempts).to be == 4
       end
     
       it "fails out if the retry limit is exceeded" do
         EM::AWS.retries = 2
         EM.run {subject.send(:send_request, @request)}
-        @response.should be_a(EM::AWS::FailureResponse)
-        @request.attempts.should == 3
+        expect(@response).to be_instance_of(EM::AWS::FailureResponse)
+        expect(@request.attempts).to be == 3
       end
       
       it "delays based on Fibonacci sequence" do
         start_time = Time.now
         EM.run {subject.send(:send_request, @request)}
-        (Time.now - start_time).should be_within(0.1).of(4)
+        expect((Time.now - start_time)).to be_within(0.1).of(4)
       end
     end
     
@@ -99,21 +99,21 @@ shared_examples "a Service" do
       
       it "retries until success" do
         EM.run {subject.send(:send_request, @request)}
-        @response.body.should == 'Success'
-        @request.attempts.should == 4
+        expect(@response.body).to be == 'Success'
+        expect(@request.attempts).to be == 4
       end
 
       it "fails out if the retry limit is exceeded" do
         EM::AWS.retries = 2
         EM.run {subject.send(:send_request, @request)}
-        @response.should be_a(EM::AWS::Query::QueryFailure)
-        @request.attempts.should == 3
+        expect(@response).to be_instance_of(EM::AWS::Query::QueryFailure)
+        expect(@request.attempts).to be == 3
       end
 
       it "delays based on Fibonacci sequence" do
         start_time = Time.now
         EM.run {subject.send(:send_request, @request)}
-        (Time.now - start_time).should be_within(0.1).of(4)
+        expect((Time.now - start_time)).to be_within(0.1).of(4)
       end
     end
     

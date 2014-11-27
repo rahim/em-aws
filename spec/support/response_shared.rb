@@ -1,15 +1,15 @@
 shared_examples "an AWS Response" do
 
   it "knows its header" do
-    subject.header.content_type.should == 'text/xml'
+    expect(subject.header.content_type).to be == 'text/xml'
   end
   
   it "knows its status" do
-    subject.status.should == @response.response_header.status
+    expect(subject.status).to be == @response.response_header.status
   end
   
   it "retains the raw result" do
-    subject.body.should == @response.response
+    expect(subject.body).to be == @response.response
   end
   
 end

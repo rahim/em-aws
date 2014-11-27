@@ -22,41 +22,41 @@ describe "#queryize_params" do
   end
 
   it "capitalizes symbol keys" do
-    subject['Zoo'].should == 'zar'
+    expect(subject['Zoo']).to be == 'zar'
   end
   
   it "doesn't touch string keys" do
-    subject['happy'].should == 'Fun Ball'
+    expect(subject['happy']).to be == 'Fun Ball'
   end
   
   it "camelcases symbol keys" do
-    subject['SomeThing'].should == 'else'
+    expect(subject['SomeThing']).to be == 'else'
   end
   
   it "splits out subhashes" do
-    subject['Foo.1.Name'].should == 'Thingy'
-    subject['Foo.1.Value'].should == 'zingy'
+    expect(subject['Foo.1.Name']).to be == 'Thingy'
+    expect(subject['Foo.1.Value']).to be == 'zingy'
   end
   
   it "has multiple values from subhashes" do
-    subject['Foo.2.Name'].should == 'Thangy'
-    subject['Foo.2.Value'].should == 'zangy'
+    expect(subject['Foo.2.Name']).to be == 'Thangy'
+    expect(subject['Foo.2.Value']).to be == 'zangy'
   end
   
   it "splits out values from sub-subhashes" do
-    subject['Foo.3.Name'].should == 'Complex'
-    subject['Foo.3.Value'].should == '17'
-    subject['Foo.3.Modify'].should == true
+    expect(subject['Foo.3.Name']).to be == 'Complex'
+    expect(subject['Foo.3.Value']).to be == '17'
+    expect(subject['Foo.3.Modify']).to be true
   end
   
   it "singularizes 'attributes' for readability" do
-    subject['Attribute'].should == 'to clean living'
-    subject['Attributes'].should be_nil
+    expect(subject['Attribute']).to be == 'to clean living'
+    expect(subject['Attributes']).to be_nil
   end
   
   it "splits out arrays" do
-    subject['AnArray.1'].should == 11
-    subject['AnArray.2'].should == 'hello'
-    subject['AnArray.3'].should be_false
+    expect(subject['AnArray.1']).to be == 11
+    expect(subject['AnArray.2']).to be == 'hello'
+    expect(subject['AnArray.3']).to be false
   end
 end
