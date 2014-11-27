@@ -6,3 +6,5 @@ pkg/*
 *.tmproj
 .rvmrc
 .DS_Store
+.idea
+spec.old

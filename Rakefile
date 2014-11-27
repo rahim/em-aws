@@ -1,7 +1,12 @@
 require "bundler/gem_tasks"
+require 'rspec/core/rake_task'
 $:.unshift File.join(File.dirname(__FILE__), 'lib')
 require 'em-aws'
 
+
+RSpec::Core::RakeTask.new(:spec)
+
+task :default => :spec
 
 namespace :clean do
   EM::AWS.aws_access_key_id = ENV['AWS_ACCESS_KEY_ID']
