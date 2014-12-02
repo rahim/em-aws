@@ -3,6 +3,9 @@
 # Require this file using `require "spec_helper.rb"` to ensure that it is only
 # loaded once.
 
+require 'simplecov'
+SimpleCov.start
+
 require 'rspec'
 require "bundler/setup"
 require 'em-aws'
