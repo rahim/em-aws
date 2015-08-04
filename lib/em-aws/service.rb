@@ -74,8 +74,8 @@ module EventMachine
               EventMachine.stop
             }.resume
           end
-          request
         end
+        request
       end
 
       def send_request(request)
