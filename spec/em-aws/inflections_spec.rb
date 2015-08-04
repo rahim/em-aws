@@ -5,11 +5,11 @@ describe EventMachine::AWS::Inflections do
   
   describe "#snakecase" do
     it "makes everything lowercase" do
-      snakecase('Foo').should == 'foo'
+      expect(snakecase('Foo')).to eq('foo')
     end
     
     it "turns word separators into underscores" do
-      snakecase('HeyYou').should == 'hey_you'
+      expect(snakecase('HeyYou')).to eq('hey_you')
     end    
   end
   

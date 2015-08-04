@@ -3,5 +3,30 @@
 # Require this file using `require "spec_helper.rb"` to ensure that it is only
 # loaded once.
 
+require 'simplecov'
+SimpleCov.start
+
+require 'rspec'
 require "bundler/setup"
-require "em-aws-spec"
+require 'em-aws'
+require 'em-aws/query'
+require "webmock/rspec"
+
+Dir[File.join File.dirname(__FILE__), 'support', '**', '*.rb'].each {|f| require f}
+
+# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+RSpec.configure do |config|
+  config.run_all_when_everything_filtered = true
+  config.filter_run_excluding slow: true unless ENV['AWS_SLOW_TESTS'] == 'true'
+  # config.filter_run :focus
+
+  # EM::AWS.loglevel = ::Logger::DEBUG
+
+  WebMock.disable_net_connect!
+  config.before(:each) do
+    EventMachine::AWS.aws_access_key_id = 'FAKE_KEY'
+    EventMachine::AWS.aws_secret_access_key = 'FAKE_SECRET'
+  end
+
+  config.include EventMachineHelper
+end

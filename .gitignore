@@ -1,8 +1,11 @@
 *.gem
 .bundle
+coverage
 .yardoc/*
 Gemfile.lock
 pkg/*
 *.tmproj
 .rvmrc
 .DS_Store
+.idea
+spec.old

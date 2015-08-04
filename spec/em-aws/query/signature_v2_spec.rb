@@ -15,18 +15,18 @@ describe EventMachine::AWS::Query::SignatureV2 do
   end
   
   it "creates a signable string" do
-    subject.signable_params(@params).should == 'POST
+    expect(subject.signable_params(@params)).to be == 'POST
 dummy.us-east-1.amazonwebservices.com
 /some_path/
 BEEBLE=brox&Bank=11.5&Viel=Spa%C3%9F&Zoo=Animal%20lives%20here'
   end
   
   it "signs what it's given with the secret key" do
-    subject.hmac_sign('This is just a test string').should == 'HCyF++QVmIQX3ejga93OG/OzBGIVDJ5jZqFy6vlGfzU='
+    expect(subject.hmac_sign('This is just a test string')).to be == 'HCyF++QVmIQX3ejga93OG/OzBGIVDJ5jZqFy6vlGfzU='
   end
   
   it "returns the signature params" do
-    subject.signature(@params).should == {
+    expect(subject.signature(@params)).to be == {
       AWSAccessKeyId: 'FAKE_KEY',
       SignatureMethod: 'HmacSHA256',
       SignatureVersion: 2,

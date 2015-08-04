@@ -10,35 +10,35 @@ describe EventMachine::AWS::Query::QueryFailure do
   it_behaves_like "an AWS Response"
   
   it "knows its request ID" do
-    subject.request_id.should == 'f75889c3-520e-11e1-9f63-79e70d4e1f28'
+    expect(subject.request_id).to eq('f75889c3-520e-11e1-9f63-79e70d4e1f28')
   end
   
   it "knows its error type" do
-    subject.type.should == 'Sender'
+    expect(subject.type).to eq('Sender')
   end
   
   it "knows its error code" do
-    subject.code.should == 'DummyFailure'
+    expect(subject.code).to eq('DummyFailure')
   end
   
   it "knows its error message" do
-    subject.message.should == 'This is a test failure.'
+    expect(subject.message).to eq('This is a test failure.')
   end
   
   it "has an exception that can be raised" do
-    subject.exception.should be_an(EventMachine::AWS::Query::QueryError)
+    expect(subject.exception).to be_instance_of(EventMachine::AWS::Query::QueryError)
   end
   
   it "can raise itself!" do
-    ->{subject.exception!}.should raise_error(EventMachine::AWS::Query::QueryError, /DummyFailure/)
+    expect(->{subject.exception!}).to raise_error(EventMachine::AWS::Query::QueryError, /DummyFailure/)
   end
   
   it "throws an exception when attempting to access any attributes" do
-    -> {subject[:foo]}.should raise_error(EventMachine::AWS::Query::QueryError, /DummyFailure/)
+    expect(->{subject[:foo]}).to raise_error(EventMachine::AWS::Query::QueryError, /DummyFailure/)
   end
 
   it "throws an exception when calling dynamic methods" do
-    -> {subject.foo}.should raise_error(EventMachine::AWS::Query::QueryError, /DummyFailure/)
+    expect(->{subject.foo}).to raise_error(EventMachine::AWS::Query::QueryError, /DummyFailure/)
   end
   
 end

@@ -1,6 +1,21 @@
 require "bundler/gem_tasks"
+require 'rspec/core/rake_task'
 $:.unshift File.join(File.dirname(__FILE__), 'lib')
 require 'em-aws'
+
+
+RSpec::Core::RakeTask.new(:spec) do |t|
+ t.exclude_pattern = 'spec/real/**/*_spec.rb'
+end
+
+task :default => :spec
+
+namespace :spec do 
+  RSpec::Core::RakeTask.new(:real) do |t|
+      t.pattern = 'spec/real/**/*_spec.rb'
+  end
+  RSpec::Core::RakeTask.new(:all)
+end
 
 
 namespace :clean do
