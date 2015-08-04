@@ -1,6 +1,7 @@
-require 'em-http'
 require 'em-aws/inflections'
 require 'em-aws/request'
+require 'em-synchrony/em-http'
+require 'fiber'
 
 module EventMachine
   module AWS
@@ -59,13 +60,19 @@ module EventMachine
       # Fake synchronous behavior if EM isn't running
       def handle_request(request)
         if EventMachine.reactor_running?
-          send_request(request)
+          Fiber.new {
+            send_request(request)
+          }.resume
         else
           EventMachine.run do
-            send_request(request)
-            request.callback {|r| response = r}
-            request.callback {|r| EventMachine.stop}
-            request.errback {|r| r.exception!}
+            Fiber.new {
+              send_request(request)
+
+              request.callback { |r| response = r }
+              request.errback  { |r| r.exception! }
+
+              EventMachine.stop
+            }.resume
           end
           request
         end
@@ -75,11 +82,22 @@ module EventMachine
         request.attempts += 1
         http_client = EventMachine::HttpRequest.new(self.url)
 
-        if request.method == :get
-          http_request = http_client.get query: request.params
-        else
-          http_request = http_client.send request.method, body: request.params
-        end
+        http_request = if request.method == :get
+                         http_client.get query: request.params
+                       else
+                         http_client.send request.method, body: request.params
+                       end
+
+        # if !EM.reactor_running?
+        #   EM.run do
+        #     Fiber.new {
+        #       http_request = block.call
+        #       EM.stop
+        #     }.resume
+        #   end
+        # else
+        #   http_request = block.call
+        # end
 
         http_request.errback do |raw_response|
           # Send again until retry limit is exceeded

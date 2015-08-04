@@ -9,11 +9,13 @@ gem 'simplecov', :require => false, :group => :test
 group :development do
   gem "guard-bundler"
   gem "guard-rspec"
-  gem "rspec" 
+  gem "rspec"
 
   gem "guard-yard"
   gem "growl"
   gem "redcarpet"
   gem "rb-fsevent", require: false
   gem "terminal-notifier-guard"
+
+  gem "em-synchrony"
 end

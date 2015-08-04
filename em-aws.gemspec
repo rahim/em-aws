@@ -21,7 +21,9 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   s.add_runtime_dependency "eventmachine"
   s.add_runtime_dependency "em-http-request"
+  s.add_runtime_dependency "em-synchrony"
   s.add_runtime_dependency "nokogiri"
+
 
   s.add_development_dependency "webmock", '~> 1.20.4'
 end

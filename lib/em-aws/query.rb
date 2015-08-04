@@ -1,4 +1,4 @@
-require 'em-http'
+require 'em-synchrony/em-http'
 require 'em-aws/inflections'
 require 'em-aws/request'
 require 'em-aws/query/signature_v2'
